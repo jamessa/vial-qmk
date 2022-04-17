@@ -48,40 +48,43 @@
 #define REDO    G(S(KC_Z))
 #define SCNSHOT S(G(KC_4))
 #define SPOTLT  G(KC_SPC)
+#define ZOOMIN  G(KC_PPLS)  // command +
+#define ZOOMOUT G(KC_PMNS)  // command -
+#define ACTUAL  G(KC_0)
 // window management utility
 #define DIVVY   KC_F13
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base */
-    [0] = LAYOUT(
-        KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,
-        KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,
-        KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,
-                                   KC_CAPS, KC_BSPC,  KC_SPC, KC_ENT
+     [0] = LAYOUT(
+           KC_Q,    KC_W,    KC_F,    KC_P,   KC_B,         KC_J,    KC_L,    KC_U,       KC_Y,    KC_SCLN,
+           KC_A,    KC_R,    KC_S,    KC_T,   KC_G,         KC_M,    KC_N,    KC_E,       KC_I,    KC_O,
+        _A(KC_Z),_C(KC_X),_S(KC_C),_G(KC_D),  KC_V,         KC_K, _G(KC_H),_S(KC_COMM),_C(KC_DOT),_A(KC_SLSH),
+                          LT(3,KC_CAPS), LT(1,KC_BSPC),LT(2,KC_SPC), LT(4,KC_ENT)
     ),
     [1] = LAYOUT(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                                   _______, _______, _______, _______
+        KC_ESC,  SCNSHOT, DIVVY,   SPOTLT,  _______, KC_PPLS, KC_P7,   KC_P8,   KC_P9,   KC_PERC,
+        KC_TAB,  CUT,     COPY,    PSTE,    KC_ENT,  KC_MINS, KC_P4,   KC_P5,   KC_P6,   KC_PAST,
+        _______, WKSPLF,  MSNCTL,  WKSPRT,  KC_SPC,  KC_DLR,  KC_P1,   KC_P2,   KC_P3,   KC_PSLS,
+                                   _______, XXXXXXX, KC_P0,   KC_PDOT
     ),
     [2] = LAYOUT(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                                   _______, _______, _______, _______
+        KC_CIRC, KC_GRV,  KC_TILD, KC_LCBR, KC_RCBR, KC_TAB,  KC_PGUP, KC_UP,   _______, _______,
+        KC_EXLM, KC_AT,   KC_HASH, KC_LPRN, KC_RPRN, KC_HOME, KC_LEFT, KC_DOWN, KC_RGHT, KC_END,
+        KC_BSLS, KC_AMPR, KC_PIPE, KC_LBRC, KC_RBRC, KC_CAPS, KC_PGDN, _______, _______, _______,
+                                   _______, KC_DEL,  XXXXXXX, _______
     ),
     [3] = LAYOUT(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                                   _______, _______, _______, _______
+        _______, _______, _______, _______, _______, KC_PPLS, _______, _______, _______, _______,
+        _______, _______, REDO,    UNDO,    _______, KC_MINS, KC_PEQL, KC_DQUO, KC_QUOT, _______,
+        _______, _______, _______, _______, _______, _______, _______, KC_LABK, KC_RABK, _______,
+                                   XXXXXXX, _______, KC_UNDS, _______
     ),
     [4] = LAYOUT(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                                   _______, _______, _______, _______
+       RESET,   _______, _______, _______, _______, _______, KC_BRIU, KC_VOLU, ZOOMIN,  _______,
+       _______, _______, _______, _______, _______, _______, KC_BRID, KC_VOLD, ZOOMOUT, _______,
+       _______, _______, _______, _______, _______, _______, _______, _______, ACTUAL,  _______,
+                                  _______, _______, _______, XXXXXXX
     ),
     [5] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
