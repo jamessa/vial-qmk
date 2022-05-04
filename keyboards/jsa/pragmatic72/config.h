@@ -22,9 +22,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* USB Device descriptor parameter */
 #define VENDOR_ID    0xFEED
 #define PRODUCT_ID   0x0F01
-#define DEVICE_VER   0x0030
+#define DEVICE_VER   0x0300
 #define MANUFACTURER James Sa
-#define PRODUCT      Pragmatic
+#define PRODUCT      Pragmatic 72
 
 /* key matrix size */
 #define MATRIX_ROWS 6
