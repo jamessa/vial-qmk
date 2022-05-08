@@ -22,26 +22,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "debounce.h"
 #include "quantum.h"
 
-#define ROWS_PER_HAND (MATRIX_ROWS)
 
-#ifdef DIRECT_PINS_RIGHT
-#    define SPLIT_MUTABLE
-#else
-#    define SPLIT_MUTABLE const
-#endif
-#ifdef MATRIX_ROW_PINS_RIGHT
-#    define SPLIT_MUTABLE_ROW
-#else
-#    define SPLIT_MUTABLE_ROW const
-#endif
-#ifdef MATRIX_COL_PINS_RIGHT
-#    define SPLIT_MUTABLE_COL
-#else
-#    define SPLIT_MUTABLE_COL const
-#endif
-
-static SPLIT_MUTABLE_ROW pin_t row_pins[ROWS_PER_HAND] = MATRIX_ROW_PINS;
-static SPLIT_MUTABLE_COL pin_t col_pins[MATRIX_COLS]   = MATRIX_COL_PINS;
+static pin_t row_pins[MATRIX_ROWS] = MATRIX_ROW_PINS;
+static pin_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;
 
 /* matrix state(1:on, 0:off) */
 extern matrix_row_t raw_matrix[MATRIX_ROWS]; // raw values
@@ -93,16 +76,12 @@ static bool select_row(uint8_t row) {
 static void unselect_row(uint8_t row) {
     pin_t pin = row_pins[row];
     if (pin != NO_PIN) {
-#            ifdef MATRIX_UNSELECT_DRIVE_HIGH
-        setPinOutput_writeHigh(pin);
-#            else
         setPinInputHigh_atomic(pin);
-#            endif
     }
 }
 
 static void unselect_rows(void) {
-    for (uint8_t x = 0; x < ROWS_PER_HAND; x++) {
+    for (uint8_t x = 0; x < MATRIX_ROWS; x++) {
         unselect_row(x);
     }
 }
@@ -116,13 +95,12 @@ __attribute__((weak)) void matrix_init_pins(void) {
     }
 }
 
-__attribute__((weak)) void matrix_read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row) {
+static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row) {
     // Start with a clear matrix row
+    matrix_row_t last_row_value = current_matrix[current_row];
     matrix_row_t current_row_value = 0;
 
-    if (!select_row(current_row)) { // Select row
-        return;                     // skip NO_PIN row
-    }
+    select_row(current_row);
     matrix_output_select_delay();
 
     // For each col...
@@ -140,35 +118,21 @@ __attribute__((weak)) void matrix_read_cols_on_row(matrix_row_t current_matrix[]
 
     // Update the matrix
     current_matrix[current_row] = current_row_value;
+    return last_row_value !=current_row_value;
 }
 
-void matrix_init(void) {
-    // initialize key pins
+void matrix_init_custom(void) {
+    // TODO: initialize hardware here
     matrix_init_pins();
-
-    // initialize matrix state: all keys off
-    memset(matrix, 0, sizeof(matrix));
-    memset(raw_matrix, 0, sizeof(raw_matrix));
-
-    debounce_init(ROWS_PER_HAND);
-
-    matrix_init_quantum();
 }
 
-
-uint8_t matrix_scan(void) {
-    matrix_row_t curr_matrix[MATRIX_ROWS] = {0};
+bool matrix_scan_custom(matrix_row_t current_matrix[]) {
+    bool changed = false;
 
     // Set row, read cols
-    for (uint8_t current_row = 0; current_row < ROWS_PER_HAND; current_row++) {
-        matrix_read_cols_on_row(curr_matrix, current_row);
+    for (uint8_t current_row = 0; current_row < MATRIX_ROWS; current_row++) {
+        changed |= read_cols_on_row(current_matrix, current_row);
     }
 
-    bool changed = memcmp(raw_matrix, curr_matrix, sizeof(curr_matrix)) != 0;
-    if (changed) memcpy(raw_matrix, curr_matrix, sizeof(curr_matrix));
-
-    debounce(raw_matrix, matrix, ROWS_PER_HAND, changed);
-    matrix_scan_quantum();
-
-    return (uint8_t)changed;
+    return changed;
 }
