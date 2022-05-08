@@ -4,6 +4,7 @@
 #include "wait.h"
 #include "print.h"
 #include "debug.h"
+
 #ifdef SPLIT_KEYBOARD
 #    include "split_common/split_util.h"
 #    include "split_common/transactions.h"
@@ -90,7 +91,7 @@ void matrix_print(void) {
         print_hex8(row);
         print(": ");
         print_matrix_row(row);
-        print("\n");
+        print("\n ");
     }
 }
 
