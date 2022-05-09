@@ -22,4 +22,7 @@ BLUETOOTH_ENABLE = no       # Enable Bluetooth
 AUDIO_ENABLE = no           # Audio output
 
 CUSTOM_MATRIX = lite
-SRC += matrix.c
+SRC += matrix.c \
+	   mcp23018.c
+
+QUANTUM_LIB_SRC += i2c_master.c

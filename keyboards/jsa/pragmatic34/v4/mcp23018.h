@@ -1,4 +1,5 @@
-/* Copyright 2021 James Sa
+/*
+ * Copyright 2020 Richard Titmuss (richard.titmuss@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,25 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "v4.h"
-#include "i2c_master.h"
-#include "mcp23018.h"
+#pragma once
 
-void matrix_init_kb(void) {
-    // put your keyboard start-up code here
-    // runs once when the firmware starts up
-    i2c_init();
+#define IODIRA 0x00
+#define IODIRB 0x01
+#define GPPUA 0x0C
+#define GPPUB 0x0D
+#define GPIOA 0x12
+#define GPIOB 0x13
 
-    matrix_init_user();
-}
+typedef int16_t mcp23018_status_t;
 
-void matrix_scan_kb(void) {
-    // put your looping keyboard code here
-    // runs every cycle (a lot)
-    if (mcp23018_reset_required()) {
-        msp23018_init();
-        // torn_set_led(2, 1);
-    }
-
-    matrix_scan_user();
-}
+void              msp23018_init(void);
+bool              mcp23018_reset_required(void);
+mcp23018_status_t mcp23018_writeReg(uint8_t regaddr, const uint8_t* data, uint16_t length);
+mcp23018_status_t mcp23018_readReg(uint8_t regaddr, uint8_t* data, uint16_t length);
