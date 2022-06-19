@@ -154,3 +154,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Bootmagic Lite key configuration */
 //#define BOOTMAGIC_LITE_ROW 0
 //#define BOOTMAGIC_LITE_COLUMN 0
+
+// 354 bytes, 6x8 font, 59 characters, 6 bytes per character,
+// From Space to Z
+#define OLED_FONT_START 32   // SPACE
+#define OLED_FONT_END 90     // Z=90
+#define OLED_FONT_H "keyboards/jsa/lib/glcdfont.c"
+
+#define OLED_UPDATE_INTERVAL 1000 //ms
+#define OLED_TIMEOUT 30*1000 // ms
