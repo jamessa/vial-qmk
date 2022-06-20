@@ -172,8 +172,10 @@ void oled_render_keylog(void) {
 
 
 bool oled_task_user(void) {
-    oled_render_layer_state();
-    oled_render_keylog();
+    // oled_render_layer_state();
+    // oled_render_keylog();
+    oled_write("12345678\n", false);
+    // oled_write("2", true);
     return false;
 }
 

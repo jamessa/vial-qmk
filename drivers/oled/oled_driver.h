@@ -133,6 +133,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #if !defined(OLED_FONT_END)
 #    define OLED_FONT_END 223
 #endif
+
 // Font render width
 #if !defined(OLED_FONT_WIDTH)
 #    define OLED_FONT_WIDTH 6
@@ -141,6 +142,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #if !defined(OLED_FONT_HEIGHT)
 #    define OLED_FONT_HEIGHT 8
 #endif
+// Font render size
+#if !defined(OLED_FONT_SIZE)
+#    define OLED_FONT_SIZE 1
+#endif
+
 // Default brightness level
 #if !defined(OLED_BRIGHTNESS)
 #    define OLED_BRIGHTNESS 255
