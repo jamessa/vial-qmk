@@ -18,6 +18,8 @@
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION
 
+#include <assert.h>
+
 // Defines names for use in layer keycodes and the keymap
 // enum layer_names {
 //     _QWERTY,
@@ -174,6 +176,8 @@ void oled_render_keylog(void) {
 bool oled_task_user(void) {
     // oled_render_layer_state();
     // oled_render_keylog();
+    assert(oled_max_chars()==10);
+    assert(oled_max_lines()==2);
     oled_write("1234567890", false);
     oled_set_cursor(0, 2);
     oled_write("ABCDEFGHIJ", false);

@@ -770,6 +770,7 @@ bool oled_invert(bool invert) {
     return oled_inverted;
 }
 
+// max character per line
 uint8_t oled_max_chars(void) {
     if (!HAS_FLAGS(oled_rotation, OLED_ROTATION_90)) {
         return OLED_DISPLAY_WIDTH / OLED_FONT_WIDTH / OLED_FONT_SIZE;
