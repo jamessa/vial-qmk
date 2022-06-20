@@ -25,8 +25,9 @@
 
 
 
-// keep the line number as index. 32=Space
 
+
+// keep the line number as index. 32=Space
 static const unsigned char PROGMEM font[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00,    // Space
     0x00, 0x00, 0x5F, 0x00, 0x00, 0x00,

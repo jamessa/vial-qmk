@@ -178,9 +178,10 @@ bool oled_task_user(void) {
     // oled_render_keylog();
     assert(oled_max_chars()==10);
     assert(oled_max_lines()==2);
-    oled_write("1234567890", false);
+    //          1234567890
+    oled_write("PRAGMATIC", false);
     oled_set_cursor(0, 2);
-    oled_write("ABCDEFGHIJ", false);
+    oled_write("-= 34 =-", false);
     return false;
 }
 

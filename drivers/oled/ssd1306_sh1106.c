@@ -429,24 +429,24 @@ void oled_write_char(const char data, bool invert) {
         memset(oled_cursor, 0x00, OLED_FONT_WIDTH * OLED_FONT_SIZE);
     } else {
         const uint8_t *glyph = &font[(cast_data - OLED_FONT_START) * OLED_FONT_WIDTH];
-        // AA
-        // AA
-        // 12*16 outline
-
         // static const uint8_t PROGMEM upper[OLED_FONT_WIDTH * OLED_FONT_SIZE] = {135,129,129,128,  0,  0,  0,  0,128,129,129,135, };
         // static const uint8_t PROGMEM lower[OLED_FONT_WIDTH * OLED_FONT_SIZE] = {224,128,128,  0,  1,  1,  1,  1,  0,128,128,224, };
 
         for(int i=0; i<OLED_FONT_WIDTH; i++){
-            // memset(oled_cursor+i, 0b10000001, 1);
+            uint8_t scaled=0;
+            uint8_t unscaled=pgm_read_byte(glyph+i);   // read glyph from program space.
+            scaled |=  unscaled & (1<<0);
+            scaled |= (unscaled & (1<<1))<<1;
+            scaled |= (unscaled & (1<<2))<<2;
+            scaled |= (unscaled & (1<<3))<<3;
+            // scaled |= scaled << 1;   // uninterlace
 
-            memcpy_P(oled_cursor+i*OLED_FONT_SIZE, glyph+i, 1);
-            memcpy_P(oled_cursor+i*OLED_FONT_SIZE+1, glyph+i, 1);
-            // memcpy_P(oled_cursor+1, glyph+1, 1);
-            // oled_cursor[i]=glyph[i];
+            oled_cursor[i*OLED_FONT_SIZE]=scaled;
+            oled_cursor[i*OLED_FONT_SIZE+1]=scaled;
+            // memcpy_P(oled_cursor+i*OLED_FONT_SIZE, glyph+i, 1);
+            // memcpy_P(oled_cursor+i*OLED_FONT_SIZE+1, glyph+i, 1);
+
         }
-        // memcpy_P(oled_cursor, glyph, OLED_FONT_WIDTH);
-        // memcpy_P(oled_cursor+OLED_FONT_WIDTH,glyph, OLED_FONT_WIDTH);
-
           // Invert if needed
         if (invert) {
             InvertCharacter(oled_cursor);
@@ -460,13 +460,24 @@ void oled_write_char(const char data, bool invert) {
             oled_dirty |= ((OLED_BLOCK_TYPE)1 << ((index + OLED_FONT_WIDTH * OLED_FONT_SIZE - 1) / OLED_BLOCK_SIZE));
         }
         // oled_advance_char();
-        oled_cursor += oled_rotation_width;
-        // memcpy_P(oled_cursor, lower, OLED_FONT_WIDTH * OLED_FONT_SIZE);
-        memcpy_P(oled_cursor,                glyph, OLED_FONT_WIDTH);
-        memcpy_P(oled_cursor+OLED_FONT_WIDTH,glyph, OLED_FONT_WIDTH);
-        // for(int i=0; i<OLED_FONT_SIZE; i++){
-        //     memcpy_P(oled_cursor+OLED_FONT_WIDTH*i, glyph, OLED_FONT_WIDTH);
-        // }
+        oled_cursor += oled_rotation_width;  // change line
+
+        for(int i=0; i<OLED_FONT_WIDTH; i++){
+            uint8_t scaled=0;
+            // memcpy_P(scaled,glyph+i,1); // working.
+            uint8_t unscaled=pgm_read_byte(glyph+i)>>4;   // read glyph from program space.
+            scaled |=  unscaled & (1<<0);
+            scaled |= (unscaled & (1<<1))<<1;
+            scaled |= (unscaled & (1<<2))<<2;
+            scaled |= (unscaled & (1<<3))<<3;
+            // scaled |= scaled << 1;
+
+            oled_cursor[i*OLED_FONT_SIZE]=scaled;
+            oled_cursor[i*OLED_FONT_SIZE+1]=scaled;
+            // memcpy_P(oled_cursor+i*OLED_FONT_SIZE, glyph+i, 1);
+            // memcpy_P(oled_cursor+i*OLED_FONT_SIZE+1, glyph+i, 1);
+
+        }
 
         // Dirty check
         if (memcmp(&oled_temp_buffer, oled_cursor, OLED_FONT_WIDTH * OLED_FONT_SIZE)) {
@@ -483,13 +494,12 @@ void oled_write_char(const char data, bool invert) {
         InvertCharacter(oled_cursor);
     }
 
-
-
     // Finally move to the next char
     oled_advance_char();
 }
 
 void oled_write(const char *data, bool invert) {
+    oled_cursor += (oled_rotation_width - strlen(data)*(OLED_FONT_WIDTH*OLED_FONT_SIZE))/2;
     const char *end = data + strlen(data);
     while (data < end) {
         oled_write_char(*data, invert);
