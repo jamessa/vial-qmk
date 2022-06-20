@@ -174,8 +174,9 @@ void oled_render_keylog(void) {
 bool oled_task_user(void) {
     // oled_render_layer_state();
     // oled_render_keylog();
-    oled_write("12345678\n", false);
-    // oled_write("2", true);
+    oled_write("1234567890", false);
+    oled_set_cursor(0, 2);
+    oled_write("ABCDEFGHIJ", false);
     return false;
 }
 

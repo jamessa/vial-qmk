@@ -353,7 +353,7 @@ void oled_render(void) {
 }
 
 void oled_set_cursor(uint8_t col, uint8_t line) {
-    uint16_t index = line * oled_rotation_width + col * OLED_FONT_WIDTH * OLED_FONT_SIZE;
+    uint16_t index = line * oled_rotation_width * (OLED_FONT_SIZE-1)+ col * OLED_FONT_WIDTH * OLED_FONT_SIZE;
 
     // Out of bounds?
     if (index >= OLED_MATRIX_SIZE) {
@@ -381,7 +381,7 @@ void oled_advance_page(bool clearPageRemainder) {
             remaining = 0;
         }
 
-        oled_cursor = &oled_buffer[index + remaining + oled_rotation_width*(OLED_FONT_SIZE<<1)];
+        oled_cursor = &oled_buffer[index + remaining];
     }
 }
 
@@ -428,14 +428,24 @@ void oled_write_char(const char data, bool invert) {
     if (cast_data < OLED_FONT_START || cast_data > OLED_FONT_END) {
         memset(oled_cursor, 0x00, OLED_FONT_WIDTH * OLED_FONT_SIZE);
     } else {
-        // const uint8_t *glyph = &font[(cast_data - OLED_FONT_START) * OLED_FONT_WIDTH];
+        const uint8_t *glyph = &font[(cast_data - OLED_FONT_START) * OLED_FONT_WIDTH];
         // AA
         // AA
         // 12*16 outline
 
-        static const uint8_t PROGMEM upper[] = {135,129,129,128,  0,  0,  0,  0,128,129,129,135, };
-        static const uint8_t PROGMEM lower[] = {224,128,128,  0,  1,  1,  1,  1,  0,128,128,224, };
-        memcpy_P(oled_cursor, upper, OLED_FONT_WIDTH * OLED_FONT_SIZE);
+        // static const uint8_t PROGMEM upper[OLED_FONT_WIDTH * OLED_FONT_SIZE] = {135,129,129,128,  0,  0,  0,  0,128,129,129,135, };
+        // static const uint8_t PROGMEM lower[OLED_FONT_WIDTH * OLED_FONT_SIZE] = {224,128,128,  0,  1,  1,  1,  1,  0,128,128,224, };
+
+        for(int i=0; i<OLED_FONT_WIDTH; i++){
+            // memset(oled_cursor+i, 0b10000001, 1);
+
+            memcpy_P(oled_cursor+i*OLED_FONT_SIZE, glyph+i, 1);
+            memcpy_P(oled_cursor+i*OLED_FONT_SIZE+1, glyph+i, 1);
+            // memcpy_P(oled_cursor+1, glyph+1, 1);
+            // oled_cursor[i]=glyph[i];
+        }
+        // memcpy_P(oled_cursor, glyph, OLED_FONT_WIDTH);
+        // memcpy_P(oled_cursor+OLED_FONT_WIDTH,glyph, OLED_FONT_WIDTH);
 
           // Invert if needed
         if (invert) {
@@ -451,7 +461,9 @@ void oled_write_char(const char data, bool invert) {
         }
         // oled_advance_char();
         oled_cursor += oled_rotation_width;
-        memcpy_P(oled_cursor, lower, OLED_FONT_WIDTH * OLED_FONT_SIZE);
+        // memcpy_P(oled_cursor, lower, OLED_FONT_WIDTH * OLED_FONT_SIZE);
+        memcpy_P(oled_cursor,                glyph, OLED_FONT_WIDTH);
+        memcpy_P(oled_cursor+OLED_FONT_WIDTH,glyph, OLED_FONT_WIDTH);
         // for(int i=0; i<OLED_FONT_SIZE; i++){
         //     memcpy_P(oled_cursor+OLED_FONT_WIDTH*i, glyph, OLED_FONT_WIDTH);
         // }
