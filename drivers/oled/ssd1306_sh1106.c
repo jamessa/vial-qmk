@@ -499,7 +499,7 @@ void oled_write_char(const char data, bool invert) {
 }
 
 void oled_write(const char *data, bool invert) {
-    oled_cursor += (oled_rotation_width - strlen(data)*(OLED_FONT_WIDTH*OLED_FONT_SIZE))/2;
+    oled_cursor += (oled_rotation_width - strlen(data)*(OLED_FONT_WIDTH*OLED_FONT_SIZE))/2; // align to middle
     const char *end = data + strlen(data);
     while (data < end) {
         oled_write_char(*data, invert);
