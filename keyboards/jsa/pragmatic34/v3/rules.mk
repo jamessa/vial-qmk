@@ -6,11 +6,7 @@ BOOTLOADER = caterina
 
 MOUSEKEY_ENABLE = yes       # Mouse keys
 EXTRAKEY_ENABLE = yes       # Audio control and System control
-NKRO_ENABLE = yes            # USB Nkey Rollover
+NKRO_ENABLE	    = yes       # USB Nkey Rollover
 OLED_ENABLE     = yes
 OLED_DRIVER     = SSD1306
-
 LTO_ENABLE      = yes
-
-# CONSOLE_ENABLE = yes         # Console for debug
-COMMAND_ENABLE = no         # Commands for debug and configuration

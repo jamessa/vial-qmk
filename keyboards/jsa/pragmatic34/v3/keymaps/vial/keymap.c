@@ -111,11 +111,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #ifdef OLED_ENABLE
 bool caps_lock = false;
 char layer_indicator[]="--------";
+uint8_t prev_layer = DYNAMIC_KEYMAP_LAYER_COUNT;    // init with max layers
 
 bool oled_task_user(void) {
     assert(oled_max_chars()==10);
     assert(oled_max_lines()==2);
 
+    // render caps lock indicator
     if(caps_lock){
         oled_write("CAPS LOCK", false);
     }else{
@@ -125,10 +127,12 @@ bool oled_task_user(void) {
     oled_set_cursor(0, 2);
 
     // render layer indicator
-    if(layer_state==0)
+    uint8_t layer = get_highest_layer(layer_state);
+    if(layer == prev_layer) return false; // no change, just return
+    prev_layer=layer;
+    if(layer==0){
         oled_write("-= 34 =-", false);
-    else {
-        int layer = get_highest_layer(layer_state);
+    } else {
         layer_indicator[layer]=layer+48;
         oled_write(layer_indicator, false);
         layer_indicator[layer]='-'; // reset indicator
