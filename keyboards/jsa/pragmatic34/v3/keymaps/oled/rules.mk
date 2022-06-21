@@ -1,0 +1,3 @@
+QMK_SETTINGS = no
+
+EXTRAFLAGS += -flto
