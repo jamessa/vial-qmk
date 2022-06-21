@@ -164,6 +164,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define OLED_FONT_HEIGHT    8
 #define OLED_FONT_SIZE      2
 #define OLED_FONT_H         "keyboards/jsa/lib/glcdfont.c"
+#define OLED_FONT_INTERLACING true
 
 #define OLED_UPDATE_INTERVAL 100 //ms 一定要設，不然不會清除畫面。
-#define OLED_TIMEOUT         30*1000 // ms

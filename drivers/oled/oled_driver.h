@@ -142,9 +142,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #if !defined(OLED_FONT_HEIGHT)
 #    define OLED_FONT_HEIGHT 8
 #endif
-// Font render size
+// Font render size: 1 for 1x, 2 for 2x.
 #if !defined(OLED_FONT_SIZE)
 #    define OLED_FONT_SIZE 1
+#endif
+// Font render size: 1 for 1x, 2 for 2x.
+#if !defined(OLED_FONT_SIZE)
+#    define OLED_FONT_SIZE 1
+#endif
+// Font render interlacing.
+#if !defined(OLED_FONT_INTERLACING)
+#    define OLED_FONT_INTERLACING false
 #endif
 
 // Default brightness level

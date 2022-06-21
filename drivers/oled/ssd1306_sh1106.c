@@ -429,8 +429,6 @@ void oled_write_char(const char data, bool invert) {
         memset(oled_cursor, 0x00, OLED_FONT_WIDTH * OLED_FONT_SIZE);
     } else {
         const uint8_t *glyph = &font[(cast_data - OLED_FONT_START) * OLED_FONT_WIDTH];
-        // static const uint8_t PROGMEM upper[OLED_FONT_WIDTH * OLED_FONT_SIZE] = {135,129,129,128,  0,  0,  0,  0,128,129,129,135, };
-        // static const uint8_t PROGMEM lower[OLED_FONT_WIDTH * OLED_FONT_SIZE] = {224,128,128,  0,  1,  1,  1,  1,  0,128,128,224, };
 
         for(int i=0; i<OLED_FONT_WIDTH; i++){
             uint8_t scaled=0;
@@ -439,7 +437,7 @@ void oled_write_char(const char data, bool invert) {
             scaled |= (unscaled & (1<<1))<<1;
             scaled |= (unscaled & (1<<2))<<2;
             scaled |= (unscaled & (1<<3))<<3;
-            // scaled |= scaled << 1;   // uninterlace
+            if(!OLED_FONT_INTERLACING) scaled |= scaled << 1;
 
             oled_cursor[i*OLED_FONT_SIZE]=scaled;
             oled_cursor[i*OLED_FONT_SIZE+1]=scaled;
@@ -470,7 +468,7 @@ void oled_write_char(const char data, bool invert) {
             scaled |= (unscaled & (1<<1))<<1;
             scaled |= (unscaled & (1<<2))<<2;
             scaled |= (unscaled & (1<<3))<<3;
-            // scaled |= scaled << 1;
+            if(!OLED_FONT_INTERLACING) scaled |= scaled << 1;
 
             oled_cursor[i*OLED_FONT_SIZE]=scaled;
             oled_cursor[i*OLED_FONT_SIZE+1]=scaled;
