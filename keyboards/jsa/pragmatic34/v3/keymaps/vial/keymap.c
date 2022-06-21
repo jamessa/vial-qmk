@@ -109,13 +109,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 #ifdef OLED_ENABLE
+bool caps_lock = false;
 char layer_indicator[]="--------";
 
 bool oled_task_user(void) {
     assert(oled_max_chars()==10);
     assert(oled_max_lines()==2);
-    //          1234567890
-    oled_write("PRAGMATIC", false);
+
+    if(caps_lock){
+        oled_write("CAPS LOCK", false);
+    }else{
+        oled_write("PRAGMATIC", false);
+    }
+
     oled_set_cursor(0, 2);
 
     // render layer indicator
@@ -129,6 +135,12 @@ bool oled_task_user(void) {
     }
 
     return false;
+}
+
+bool led_update_user(led_t led_state){
+
+    caps_lock = led_state.caps_lock;
+    return true;
 }
 #endif // OLED_ENABLE
 
