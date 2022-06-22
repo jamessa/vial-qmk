@@ -148,7 +148,7 @@ void random_fill(void){
 bool caps_lock = false;
 char layer_indicator[]="--------";
 uint8_t prev_layer = 8;    // init with max layers
-bool render_text(void){        // render layer indicator
+bool render_pragmatic(void){        // render layer indicator
         uint8_t layer = get_highest_layer(layer_state);
         if(layer == prev_layer) return false; // no change, just return
         printf("layer changed from %d to %d\n",prev_layer, layer);
@@ -172,6 +172,12 @@ bool render_text(void){        // render layer indicator
     return false;
 }
 
+bool render_text(void){
+    oled_clear();
+    oled_write("0123456789ABCDEFGHIJKLMNOPQWXYZ", false);
+    return false;
+}
+
 bool oled_task_user(void) {
     if(!oled_needs_update) return false;
     oled_needs_update = false;
@@ -181,9 +187,10 @@ bool oled_task_user(void) {
     assert(oled_max_lines()==2);
 
     switch(status){
+        case 1: return render_pragmatic();
         case 0: return render_text();
-        case 1: random_fill(); return false;
-        default: return render_text();
+        case 2: random_fill(); return false;
+        default: return render_pragmatic();
     }
 
     return false;  // the reason. 但是我還是不懂 https://github.com/qmk/qmk_firmware/pull/14864

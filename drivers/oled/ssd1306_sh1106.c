@@ -392,6 +392,7 @@ void oled_advance_char(void) {
     // Do we have enough space on the current line for the next character
     if (remainingSpace < OLED_FONT_WIDTH * OLED_FONT_SIZE) {
         nextIndex += remainingSpace;
+        if (OLED_FONT_SIZE == 2) nextIndex += oled_rotation_width;
     }
 
     // Did we go out of bounds
@@ -401,6 +402,7 @@ void oled_advance_char(void) {
 
     // Update cursor position
     oled_cursor = &oled_buffer[nextIndex];
+    uprintf("index: %d.\n", nextIndex);
 }
 
 // Main handler that writes character data to the display buffer
@@ -497,8 +499,10 @@ void oled_write_char(const char data, bool invert) {
 }
 
 void oled_write(const char *data, bool invert) {
-    oled_cursor += (oled_rotation_width - strlen(data)*(OLED_FONT_WIDTH*OLED_FONT_SIZE))/2; // align to middle
-    const char *end = data + strlen(data);
+    uint8_t length=strnlen(data, 256);
+    if(length < oled_max_chars())
+        oled_cursor += (oled_rotation_width - length*(OLED_FONT_WIDTH*OLED_FONT_SIZE))/2; // align to middle
+    const char *end = data + length;
     while (data < end) {
         oled_write_char(*data, invert);
         data++;
