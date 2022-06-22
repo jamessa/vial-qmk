@@ -108,14 +108,42 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-#ifdef OLED_ENABLE
-bool caps_lock = false;
-char layer_indicator[]="--------";
-uint8_t prev_layer = DYNAMIC_KEYMAP_LAYER_COUNT;    // init with max layers
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+//   debug_enable=true;
+//   debug_matrix=true;
+//   debug_keyboard=true;
+//   debug_mouse=true;
+}
 
+#ifdef OLED_ENABLE
+
+bool oled_needs_update = true;
+bool caps_lock = false;
+
+bool led_update_user(led_t led_state){
+    if( caps_lock == led_state.caps_lock) return true;
+
+    dprint("led state change\n");
+    caps_lock = led_state.caps_lock;
+    oled_needs_update = true;
+    return true;
+}
+
+uint8_t layer=0;
+layer_state_t layer_state_set_user(layer_state_t state){
+    // render layer indicator
+    dprint("layer changed\n");
+    if(layer == get_highest_layer(state)) return state;
+    layer = get_highest_layer(state);
+    oled_needs_update = true;
+    return state;
+}
+
+char layer_indicator[]="--------";
 bool oled_task_user(void) {
-    assert(oled_max_chars()==10);
-    assert(oled_max_lines()==2);
+    if(!oled_needs_update) return false;
+    oled_needs_update = false;
 
     // render caps lock indicator
     if(caps_lock){
@@ -126,10 +154,7 @@ bool oled_task_user(void) {
 
     oled_set_cursor(0, 2);
 
-    // render layer indicator
     uint8_t layer = get_highest_layer(layer_state);
-    if(layer == prev_layer) return false; // no change, just return
-    prev_layer=layer;
     if(layer==0){
         oled_write("-= 34 =-", false);
     } else {
@@ -138,13 +163,9 @@ bool oled_task_user(void) {
         layer_indicator[layer]='-'; // reset indicator
     }
 
+    dprint("\nOled updated.\n");
     return false;
 }
 
-bool led_update_user(led_t led_state){
-
-    caps_lock = led_state.caps_lock;
-    return true;
-}
 #endif // OLED_ENABLE
 
