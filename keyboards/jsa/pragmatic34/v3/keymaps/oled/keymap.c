@@ -118,40 +118,75 @@ uint8_t jsf8(void) {
 	return d = e + a;
 }
 
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  debug_enable=true;
+//   debug_matrix=true;
+//   debug_keyboard=true;
+//   debug_mouse=true;
+}
+
 #ifdef OLED_ENABLE
+uint8_t status=0;
+bool oled_needs_update=true;
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    oled_clear();
+    if(record->event.pressed){
+        status = (status+1) % 2;
+        oled_needs_update=true;
+    }
+
+    printf("status = %d\n", status);
+    return true;
+}
+
+
+void random_fill(void){
+    for(int i=0; i<128*32/2; i++)
+        oled_write_pixel(jsf8()%128, jsf8()%32, true);
+}
 bool caps_lock = false;
 char layer_indicator[]="--------";
 uint8_t prev_layer = 8;    // init with max layers
+bool render_text(void){        // render layer indicator
+        uint8_t layer = get_highest_layer(layer_state);
+        if(layer == prev_layer) return false; // no change, just return
+        printf("layer changed from %d to %d\n",prev_layer, layer);
+
+        // render caps lock indicator
+        if(caps_lock){
+            oled_write("CAPS LOCK", false);
+        }else{
+            oled_write("PRAGMATIC", false);
+        }
+
+        oled_set_cursor(0, 2);
+
+        if(layer==0){
+            oled_write("-= 34 =-", false);
+        } else {
+            layer_indicator[layer]=layer+48;
+            oled_write(layer_indicator, false);
+            layer_indicator[layer]='-'; // reset indicator
+        }
+    return false;
+}
 
 bool oled_task_user(void) {
+    if(!oled_needs_update) return false;
+    oled_needs_update = false;
+
+    dprintf("oled task: %d\n", status);
     assert(oled_max_chars()==10);
     assert(oled_max_lines()==2);
 
-    // render caps lock indicator
-    if(caps_lock){
-        oled_write("CAPS LOCK", false);
-    }else{
-        oled_write("PRAGMATIC", false);
+    switch(status){
+        case 0: return render_text();
+        case 1: random_fill(); return false;
+        default: return render_text();
     }
 
-    oled_set_cursor(0, 2);
-
-    // render layer indicator
-    uint8_t layer = get_highest_layer(layer_state);
-    if(layer == prev_layer) return false; // no change, just return
-    prev_layer=layer;
-    if(layer==0){
-        oled_write("-= 34 =-", false);
-    } else {
-        layer_indicator[layer]=layer+48;
-        oled_write(layer_indicator, false);
-        layer_indicator[layer]='-'; // reset indicator
-    }
-
-    for(int i=0; i<1024; i++)
-        oled_write_pixel(jsf8()%128, jsf8()%32, true);
-
-    return false;
+    return false;  // the reason. 但是我還是不懂 https://github.com/qmk/qmk_firmware/pull/14864
 }
 
 bool led_update_user(led_t led_state){
@@ -160,4 +195,3 @@ bool led_update_user(led_t led_state){
     return true;
 }
 #endif // OLED_ENABLE
-

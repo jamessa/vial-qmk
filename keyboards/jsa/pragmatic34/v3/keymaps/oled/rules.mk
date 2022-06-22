@@ -1,3 +1,3 @@
-QMK_SETTINGS = no
+CONSOLE_ENABLE = yes         # Console for debug
 
 EXTRAFLAGS += -flto
