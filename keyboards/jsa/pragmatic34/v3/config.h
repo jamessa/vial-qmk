@@ -157,9 +157,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // 354 bytes, 6x8 font, 59 characters, 6 bytes per character,
 // From Space to Z
-#define OLED_FONT_START 32   // SPACE
-#define OLED_FONT_END 90     // Z=90
-
+#define OLED_FONT_START     32   // SPACE
+#define OLED_FONT_END       90   // Z
 #define OLED_FONT_WIDTH     6
 #define OLED_FONT_HEIGHT    8
 #define OLED_FONT_SIZE      2

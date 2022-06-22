@@ -160,7 +160,7 @@ bool render_pragmatic(void){        // render layer indicator
             oled_write("PRAGMATIC", false);
         }
 
-        oled_set_cursor(0, 2);
+        oled_set_cursor(0, 1);
 
         if(layer==0){
             oled_write("-= 34 =-", false);
