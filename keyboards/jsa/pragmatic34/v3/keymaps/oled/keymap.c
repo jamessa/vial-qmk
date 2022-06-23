@@ -127,12 +127,13 @@ void keyboard_post_init_user(void) {
 }
 
 #ifdef OLED_ENABLE
-uint8_t status=0;
+#define NUM_OF_FEATURERS 4
+uint8_t status=;
 bool oled_needs_update=true;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     oled_clear();
     if(record->event.pressed){
-        status = (status+1) % 2;
+        status = (status+1) % NUM_OF_FEATURERS;
         oled_needs_update=true;
     }
 
@@ -179,11 +180,17 @@ bool render_text(void){
     return false;
 }
 
+bool render_inverted(void){
+    oled_clear();
+    oled_write("1234567890ABEFG", true);
+    return false;
+}
+
 uint32_t timer = 0;
 bool oled_task_user(void) {
     if(timer_expired32(timer_read32(), timer)){
         timer = timer_read32() + 3000; // 3s
-        status = (status+1) % 3;
+        status = (status+1) % 4;
         oled_needs_update=true;
     }
 
@@ -199,10 +206,12 @@ bool oled_task_user(void) {
         assert(oled_max_lines()==2);
     }
 
+    dprintf("feature %d", status);
     switch(status){
         case 1: return render_pragmatic();
         case 0: return render_text();
         case 2: random_fill(); return false;
+        case 3: return render_inverted();
         default: return render_pragmatic();
     }
 

@@ -156,6 +156,8 @@ static void InvertCharacter(uint8_t *cursor) {
     const uint8_t *end = cursor + OLED_FONT_WIDTH * OLED_FONT_SIZE;
     while (cursor < end) {
         *cursor = ~(*cursor);
+        if(OLED_FONT_INTERLACING)
+            *cursor &= 0b01010101;
         cursor++;
     }
 }
@@ -446,19 +448,7 @@ void oled_write_char(const char data, bool invert) {
             // memcpy_P(oled_cursor+i*OLED_FONT_SIZE+1, glyph+i, 1);
 
         }
-          // Invert if needed
-        if (invert) {
-            InvertCharacter(oled_cursor);
-        }
 
-        // Dirty check
-        if (memcmp(&oled_temp_buffer, oled_cursor, OLED_FONT_WIDTH * OLED_FONT_SIZE)) {
-            uint16_t index = oled_cursor - &oled_buffer[0];
-            oled_dirty |= ((OLED_BLOCK_TYPE)1 << (index / OLED_BLOCK_SIZE));
-            // Edgecase check if the written data spans the 2 chunks
-            oled_dirty |= ((OLED_BLOCK_TYPE)1 << ((index + OLED_FONT_WIDTH * OLED_FONT_SIZE - 1) / OLED_BLOCK_SIZE));
-        }
-        // oled_advance_char();
         oled_cursor += oled_rotation_width;  // change line
 
         for(int i=0; i<OLED_FONT_WIDTH; i++){
@@ -478,19 +468,22 @@ void oled_write_char(const char data, bool invert) {
 
         }
 
-        // Dirty check
-        if (memcmp(&oled_temp_buffer, oled_cursor, OLED_FONT_WIDTH * OLED_FONT_SIZE)) {
-            uint16_t index = oled_cursor - &oled_buffer[0];
-            oled_dirty |= ((OLED_BLOCK_TYPE)1 << (index / OLED_BLOCK_SIZE));
-            // Edgecase check if the written data spans the 2 chunks
-            oled_dirty |= ((OLED_BLOCK_TYPE)1 << ((index + OLED_FONT_WIDTH * OLED_FONT_SIZE - 1) / OLED_BLOCK_SIZE));
-        }
         oled_cursor -= oled_rotation_width; // reset cursor
     }
 
     // Invert if needed
     if (invert) {
         InvertCharacter(oled_cursor);
+        if(OLED_FONT_SIZE==2)
+             InvertCharacter(oled_cursor+oled_rotation_width);
+    }
+
+    // Dirty check
+    if (memcmp(&oled_temp_buffer, oled_cursor, OLED_FONT_WIDTH * OLED_FONT_SIZE)) {
+        uint16_t index = oled_cursor - &oled_buffer[0];
+        oled_dirty |= ((OLED_BLOCK_TYPE)1 << (index / OLED_BLOCK_SIZE));
+        // Edgecase check if the written data spans the 2 chunks
+        oled_dirty |= ((OLED_BLOCK_TYPE)1 << ((index + OLED_FONT_WIDTH * OLED_FONT_SIZE - 1) / OLED_BLOCK_SIZE));
     }
 
     // Finally move to the next char
