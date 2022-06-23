@@ -149,42 +149,55 @@ bool caps_lock = false;
 char layer_indicator[]="--------";
 uint8_t prev_layer = 8;    // init with max layers
 bool render_pragmatic(void){        // render layer indicator
-        uint8_t layer = get_highest_layer(layer_state);
-        if(layer == prev_layer) return false; // no change, just return
-        printf("layer changed from %d to %d\n",prev_layer, layer);
+    oled_clear();
+    uint8_t layer = get_highest_layer(layer_state);
+    if(layer == prev_layer) return false; // no change, just return
+    printf("layer changed from %d to %d\n",prev_layer, layer);
 
-        // render caps lock indicator
-        if(caps_lock){
-            oled_write("CAPS LOCK", false);
-        }else{
-            oled_write("PRAGMATIC", false);
-        }
+    // render caps lock indicator
+    if(caps_lock){
+        oled_write("CAPS LOCK", false);
+    }else{
+        oled_write("PRAGMATIC", false);
+    }
 
-        oled_set_cursor(0, 1);
+    oled_set_cursor(0, 1);
 
-        if(layer==0){
-            oled_write("-= 34 =-", false);
-        } else {
-            layer_indicator[layer]=layer+48;
-            oled_write(layer_indicator, false);
-            layer_indicator[layer]='-'; // reset indicator
-        }
+    if(layer==0){
+        oled_write("-= 34 =-", false);
+    } else {
+        layer_indicator[layer]=layer+48;
+        oled_write(layer_indicator, false);
+        layer_indicator[layer]='-'; // reset indicator
+    }
     return false;
 }
 
 bool render_text(void){
     oled_clear();
-    oled_write("0123456789ABCDEFGHIJKLMNOPQWXYZ", false);
+    oled_write("1234567890AB", false);
     return false;
 }
 
+uint32_t timer = 0;
 bool oled_task_user(void) {
+    if(timer_expired32(timer_read32(), timer)){
+        timer = timer_read32() + 3000; // 3s
+        status = (status+1) % 3;
+        oled_needs_update=true;
+    }
+
     if(!oled_needs_update) return false;
     oled_needs_update = false;
 
-    dprintf("oled task: %d\n", status);
-    assert(oled_max_chars()==10);
-    assert(oled_max_lines()==2);
+    if(OLED_FONT_SIZE==1){
+        assert(oled_max_chars()==21);
+        assert(oled_max_lines()==4);
+    }
+    if(OLED_FONT_SIZE==2){
+        assert(oled_max_chars()==10);
+        assert(oled_max_lines()==2);
+    }
 
     switch(status){
         case 1: return render_pragmatic();
