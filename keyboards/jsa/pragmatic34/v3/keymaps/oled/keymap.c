@@ -128,7 +128,7 @@ void keyboard_post_init_user(void) {
 
 #ifdef OLED_ENABLE
 #define NUM_OF_FEATURERS 4
-uint8_t status=;
+uint8_t status=NUM_OF_FEATURERS;
 bool oled_needs_update=true;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     oled_clear();
@@ -190,7 +190,7 @@ uint32_t timer = 0;
 bool oled_task_user(void) {
     if(timer_expired32(timer_read32(), timer)){
         timer = timer_read32() + 3000; // 3s
-        status = (status+1) % 4;
+        status = (status+1) % NUM_OF_FEATURERS;
         oled_needs_update=true;
     }
 

@@ -436,7 +436,7 @@ void oled_write_char(const char data, bool invert) {
         for(int i=0; i<OLED_FONT_WIDTH; i++){
             uint8_t scaled=0;
             uint8_t unscaled=pgm_read_byte(glyph+i);   // read glyph from program space.
-            scaled |=  unscaled & (1<<0);
+            scaled |= (unscaled & (1<<0))<<0;
             scaled |= (unscaled & (1<<1))<<1;
             scaled |= (unscaled & (1<<2))<<2;
             scaled |= (unscaled & (1<<3))<<3;
@@ -444,31 +444,20 @@ void oled_write_char(const char data, bool invert) {
 
             oled_cursor[i*OLED_FONT_SIZE]=scaled;
             oled_cursor[i*OLED_FONT_SIZE+1]=scaled;
-            // memcpy_P(oled_cursor+i*OLED_FONT_SIZE, glyph+i, 1);
-            // memcpy_P(oled_cursor+i*OLED_FONT_SIZE+1, glyph+i, 1);
-
         }
-
-        oled_cursor += oled_rotation_width;  // change line
 
         for(int i=0; i<OLED_FONT_WIDTH; i++){
             uint8_t scaled=0;
-            // memcpy_P(scaled,glyph+i,1); // working.
             uint8_t unscaled=pgm_read_byte(glyph+i)>>4;   // read glyph from program space.
-            scaled |=  unscaled & (1<<0);
+            scaled |= (unscaled & (1<<0))<<0;
             scaled |= (unscaled & (1<<1))<<1;
             scaled |= (unscaled & (1<<2))<<2;
             scaled |= (unscaled & (1<<3))<<3;
             if(!OLED_FONT_INTERLACING) scaled |= scaled << 1;
 
-            oled_cursor[i*OLED_FONT_SIZE]=scaled;
-            oled_cursor[i*OLED_FONT_SIZE+1]=scaled;
-            // memcpy_P(oled_cursor+i*OLED_FONT_SIZE, glyph+i, 1);
-            // memcpy_P(oled_cursor+i*OLED_FONT_SIZE+1, glyph+i, 1);
-
+            oled_cursor[oled_rotation_width+i*OLED_FONT_SIZE]=scaled;
+            oled_cursor[oled_rotation_width+i*OLED_FONT_SIZE+1]=scaled;
         }
-
-        oled_cursor -= oled_rotation_width; // reset cursor
     }
 
     // Invert if needed
