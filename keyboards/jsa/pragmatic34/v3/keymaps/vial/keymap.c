@@ -152,7 +152,7 @@ bool oled_task_user(void) {
         oled_write("PRAGMATIC", false);
     }
 
-    oled_set_cursor(0, 2);
+    oled_set_cursor(0, 1);
 
     uint8_t layer = get_highest_layer(layer_state);
     if(layer==0){

@@ -402,7 +402,6 @@ void oled_advance_char(void) {
 
     // Update cursor position
     oled_cursor = &oled_buffer[nextIndex];
-    uprintf("index: %d.\n", nextIndex);
 }
 
 // Main handler that writes character data to the display buffer
