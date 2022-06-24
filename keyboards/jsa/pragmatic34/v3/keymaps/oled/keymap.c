@@ -202,7 +202,7 @@ bool render_pragmatic(void){        // render layer indicator
 bool render_font(bool inverted){
     oled_clear();
 
-    char c=' ';
+    char c='A';
     for(int i=1; i<=oled_max_chars()*oled_max_lines(); i++){
         oled_write_char(c, inverted);
         if(++c >'Z') c=' ';
