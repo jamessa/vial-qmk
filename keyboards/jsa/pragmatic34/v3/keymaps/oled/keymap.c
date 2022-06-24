@@ -142,7 +142,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         time_out = timer_read32() + 60000; // 60s
         num_of_keypressed++;
     }
-
+    dprintf("mod state = %08b\n", get_mods());
     dprintf("status = %d, num of keys pressed=%d\n", status, num_of_keypressed);
     return true;
 }
