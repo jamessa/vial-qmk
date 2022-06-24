@@ -161,7 +161,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define OLED_FONT_END       90   // Z
 #define OLED_FONT_WIDTH     6
 #define OLED_FONT_HEIGHT    8
-#define OLED_FONT_SIZE      2
+#define OLED_FONT_SIZE      2    // 1 or 2
 #define OLED_FONT_H         "keyboards/jsa/lib/glcdfont.c"
 #define OLED_FONT_INTERLACING true
 

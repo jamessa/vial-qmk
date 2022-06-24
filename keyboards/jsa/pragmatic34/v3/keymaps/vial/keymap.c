@@ -120,6 +120,7 @@ void keyboard_post_init_user(void) {
 
 bool oled_needs_update = true;
 bool caps_lock = false;
+uint8_t layer=0;
 
 bool led_update_user(led_t led_state){
     if( caps_lock == led_state.caps_lock) return true;
@@ -130,7 +131,6 @@ bool led_update_user(led_t led_state){
     return true;
 }
 
-uint8_t layer=0;
 layer_state_t layer_state_set_user(layer_state_t state){
     // render layer indicator
     dprint("layer changed\n");
@@ -154,7 +154,6 @@ bool oled_task_user(void) {
 
     oled_set_cursor(0, 1);
 
-    uint8_t layer = get_highest_layer(layer_state);
     if(layer==0){
         oled_write("-= 34 =-", false);
     } else {
@@ -162,8 +161,6 @@ bool oled_task_user(void) {
         oled_write(layer_indicator, false);
         layer_indicator[layer]='-'; // reset indicator
     }
-
-    dprint("\nOled updated.\n");
     return false;
 }
 

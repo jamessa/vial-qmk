@@ -131,8 +131,30 @@ void keyboard_post_init_user(void) {
 
 uint32_t time_out = 0;
 uint8_t status=NUM_OF_FEATURERS;
-bool oled_needs_update=true;
 uint16_t num_of_keypressed = 0;
+
+bool oled_needs_update = true;
+bool caps_lock = false;
+uint8_t layer=0;
+
+bool led_update_user(led_t led_state){
+    if( caps_lock == led_state.caps_lock) return true;
+
+    dprint("led state change\n");
+    caps_lock = led_state.caps_lock;
+    oled_needs_update = true;
+    return true;
+}
+
+layer_state_t layer_state_set_user(layer_state_t state){
+    // render layer indicator
+    dprint("layer changed\n");
+    if(layer == get_highest_layer(state)) return state;
+    layer = get_highest_layer(state);
+    oled_needs_update = true;
+    return state;
+}
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     oled_clear();
@@ -147,20 +169,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-
 void random_fill(void){
     for(int i=0; i<128*32/2; i++)
         oled_write_pixel(jsf8()%128, jsf8()%32, true);
 }
-bool caps_lock = false;
+
 char layer_indicator[]="--------";
 uint8_t prev_layer = 8;    // init with max layers
 bool render_pragmatic(void){        // render layer indicator
+    // force update
     oled_clear();
-    uint8_t layer = get_highest_layer(layer_state);
-    if(layer == prev_layer) return false; // no change, just return
-    prev_layer = layer;
-    dprintf("layer changed from %d to %d\n",prev_layer, layer);
 
     // render caps lock indicator
     if(caps_lock){
@@ -181,21 +199,21 @@ bool render_pragmatic(void){        // render layer indicator
     return false;
 }
 
-bool render_text(void){
+bool render_font(bool inverted){
     oled_clear();
-    oled_write("1234567890AB", false);
-    return false;
-}
 
-bool render_inverted(void){
-    oled_clear();
-    oled_write("1234567890ABEFG", true);
+    char c=' ';
+    for(int i=1; i<=oled_max_chars()*oled_max_lines(); i++){
+        oled_write_char(c, inverted);
+        if(++c >'Z') c=' ';
+    }
+
     return false;
 }
 
 bool oled_task_user(void) {
     if(timer_expired32(timer_read32(), time_out)){
-        time_out = timer_read32() + 3000; // 3s
+        time_out = timer_read32() + 30000; // 3s
         status = (status+1) % NUM_OF_FEATURERS;
         oled_needs_update=true;
     }
@@ -203,30 +221,24 @@ bool oled_task_user(void) {
     if(!oled_needs_update) return false;
     oled_needs_update = false;
 
-    // if(OLED_FONT_SIZE==1){
-    //     assert( oled_max_chars()==21);
-    //     assert(oled_max_lines()==4);
-    // }
-    // if(OLED_FONT_SIZE==2){
-    //     assert(oled_max_chars()==10);
-    //     assert(oled_max_lines()==2);
-    // }
+    if(OLED_FONT_SIZE==1){
+        assert( oled_max_chars()==21);
+        assert(oled_max_lines()==4);
+    }
+    if(OLED_FONT_SIZE==2){
+        assert(oled_max_chars()==10);
+        assert(oled_max_lines()==2);
+    }
 
     dprintf("feature %d\n", status);
     switch(status){
-        case 1: return render_pragmatic();
-        case 0: return render_text();
-        case 2: random_fill(); return false;
-        case 3: return render_inverted();
+        case 0: return render_pragmatic();
+        case 1: return render_font(false);
+        case 2: return render_font(true); // inverted
+        case 3: random_fill(); return false;
         default: return render_pragmatic();
     }
 
     return false;  // the reason. 但是我還是不懂 https://github.com/qmk/qmk_firmware/pull/14864
-}
-
-bool led_update_user(led_t led_state){
-
-    caps_lock = led_state.caps_lock;
-    return true;
 }
 #endif // OLED_ENABLE
