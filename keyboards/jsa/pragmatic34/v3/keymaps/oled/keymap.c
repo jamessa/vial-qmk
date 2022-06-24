@@ -128,16 +128,22 @@ void keyboard_post_init_user(void) {
 
 #ifdef OLED_ENABLE
 #define NUM_OF_FEATURERS 4
+
+uint32_t time_out = 0;
 uint8_t status=NUM_OF_FEATURERS;
 bool oled_needs_update=true;
+uint16_t num_of_keypressed = 0;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     oled_clear();
     if(record->event.pressed){
         status = (status+1) % NUM_OF_FEATURERS;
         oled_needs_update=true;
+        time_out = timer_read32() + 60000; // 60s
+        num_of_keypressed++;
     }
 
-    printf("status = %d\n", status);
+    dprintf("status = %d, num of keys pressed=%d\n", status, num_of_keypressed);
     return true;
 }
 
@@ -153,7 +159,8 @@ bool render_pragmatic(void){        // render layer indicator
     oled_clear();
     uint8_t layer = get_highest_layer(layer_state);
     if(layer == prev_layer) return false; // no change, just return
-    printf("layer changed from %d to %d\n",prev_layer, layer);
+    prev_layer = layer;
+    dprintf("layer changed from %d to %d\n",prev_layer, layer);
 
     // render caps lock indicator
     if(caps_lock){
@@ -186,10 +193,9 @@ bool render_inverted(void){
     return false;
 }
 
-uint32_t timer = 0;
 bool oled_task_user(void) {
-    if(timer_expired32(timer_read32(), timer)){
-        timer = timer_read32() + 3000; // 3s
+    if(timer_expired32(timer_read32(), time_out)){
+        time_out = timer_read32() + 3000; // 3s
         status = (status+1) % NUM_OF_FEATURERS;
         oled_needs_update=true;
     }
@@ -197,16 +203,16 @@ bool oled_task_user(void) {
     if(!oled_needs_update) return false;
     oled_needs_update = false;
 
-    if(OLED_FONT_SIZE==1){
-        assert(oled_max_chars()==21);
-        assert(oled_max_lines()==4);
-    }
-    if(OLED_FONT_SIZE==2){
-        assert(oled_max_chars()==10);
-        assert(oled_max_lines()==2);
-    }
+    // if(OLED_FONT_SIZE==1){
+    //     assert( oled_max_chars()==21);
+    //     assert(oled_max_lines()==4);
+    // }
+    // if(OLED_FONT_SIZE==2){
+    //     assert(oled_max_chars()==10);
+    //     assert(oled_max_lines()==2);
+    // }
 
-    dprintf("feature %d", status);
+    dprintf("feature %d\n", status);
     switch(status){
         case 1: return render_pragmatic();
         case 0: return render_text();
