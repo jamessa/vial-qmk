@@ -18,8 +18,6 @@
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION
 
-#include <assert.h>
-
 // Defines names for use in layer keycodes and the keymap
 // enum layer_names {
 //     _QWERTY,
@@ -110,7 +108,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 void keyboard_post_init_user(void) {
   // Customise these values to desired behaviour
-//   debug_enable=true;
+  debug_enable=true;
 //   debug_matrix=true;
 //   debug_keyboard=true;
 //   debug_mouse=true;
@@ -122,42 +120,46 @@ bool oled_needs_update = true;
 bool caps_lock = false;
 uint8_t layer=0;
 
+// for caps lock
 bool led_update_user(led_t led_state){
     if( caps_lock == led_state.caps_lock) return true;
+    dprint("caps lock changed\n");
 
-    dprint("led state change\n");
     caps_lock = led_state.caps_lock;
     oled_needs_update = true;
     return true;
 }
 
+
 layer_state_t layer_state_set_user(layer_state_t state){
     // render layer indicator
-    dprint("layer changed\n");
     if(layer == get_highest_layer(state)) return state;
+    dprint("layer changed\n");
+
     layer = get_highest_layer(state);
     oled_needs_update = true;
     return state;
 }
 
-char layer_indicator[]="--------";
 bool oled_task_user(void) {
     if(!oled_needs_update) return false;
     oled_needs_update = false;
 
     // render caps lock indicator
     if(caps_lock){
-        oled_write("CAPS LOCK", false);
+        oled_write_P(PSTR("CAPS LOCK"), false);
     }else{
-        oled_write("PRAGMATIC", false);
+        oled_write_P(PSTR("PRAGMATIC"), false);
     }
 
     oled_set_cursor(0, 1);
 
     if(layer==0){
-        oled_write("-= 34 =-", false);
+        oled_write_P(PSTR("-= 34 =-"), false);
     } else {
-        layer_indicator[layer]=layer+48;
+
+        char layer_indicator[]="--------";
+        layer_indicator[layer]=layer+48;    // ex. ---3---
         oled_write(layer_indicator, false);
         layer_indicator[layer]='-'; // reset indicator
     }
