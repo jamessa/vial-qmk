@@ -576,6 +576,14 @@ void oled_write_pixel(uint8_t x, uint8_t y, bool on) {
 
 #if defined(__AVR__)
 void oled_write_P(const char *data, bool invert) {
+    uint8_t length=0;
+    while(pgm_read_byte(data+length)!=0 && length < 256){
+        length++;
+    }
+
+    if(length < oled_max_chars())
+        oled_cursor += (oled_rotation_width - length*(OLED_FONT_WIDTH*OLED_FONT_SIZE))/2; // align to middle
+
     uint8_t c = pgm_read_byte(data);
     while (c != 0) {
         oled_write_char(c, invert);
