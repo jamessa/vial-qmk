@@ -20,10 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config_common.h"
 
 /* USB Device descriptor parameter */
-#define VENDOR_ID    0xFEED
-#define PRODUCT_ID   0x0F03
+#define VENDOR_ID    0x1209
+#define PRODUCT_ID   0xA805
 #define DEVICE_VER   0x0300
-#define MANUFACTURER James Sa
+#define MANUFACTURER Pragmatic Inc.
 #define PRODUCT      Pragmatic 34
 
 /* key matrix size */
