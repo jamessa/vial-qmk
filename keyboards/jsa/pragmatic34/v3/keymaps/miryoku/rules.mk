@@ -1,0 +1,5 @@
+COMBO_ENABLE = yes
+MOUSEKEY_ENABLE = yes
+QMK_SETTINGS = no
+
+EXTRAFLAGS += -flto
