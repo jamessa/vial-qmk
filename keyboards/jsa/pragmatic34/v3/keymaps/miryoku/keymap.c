@@ -43,14 +43,14 @@ enum my_layers {
 };
 
 const char *layer_names[TOTAL_LAYER_COUNT] = {
-    [COLEMAK] = " COL ",
-    [QWERTY]  = " QWE ",
-    [NAV]     = " NAV ",
-    [MOUSE]   = "MOUSE",
-    [MEDIA]   = "MEDIA",
-    [NUM]     = " NUM ",
-    [SYM]     = " SYM ",
-    [FUNC]    = " FUN ",
+    [COLEMAK] = "COLEMAK",
+    [QWERTY]  = "QWERTY ",
+    [NAV]     = "  NAV  ",
+    [MOUSE]   = " MOUSE ",
+    [MEDIA]   = " MEDIA ",
+    [NUM]     = "  NUM  ",
+    [SYM]     = "  SYM  ",
+    [FUNC]    = " FUNC  ",
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
