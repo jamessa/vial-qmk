@@ -30,6 +30,19 @@
 #define CUT C(KC_X)
 #define UNDO C(KC_Z)
 
+enum {
+    U_TD_BOOT,
+};
+
+static void u_td_fn_boot(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 2)
+        reset_keyboard();
+}
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [U_TD_BOOT] = ACTION_TAP_DANCE_FN(u_td_fn_boot),
+};
+
 enum my_layers {
     COLEMAK = 0,
     QWERTY,
@@ -119,7 +132,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [FUNC] = LAYOUT(
         KC_F12, KC_F7, KC_F8, KC_F9, KC_PSCR,
-            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TD(U_TD_BOOT),
         KC_F11, KC_F4, KC_F5, KC_F6, KC_SCRL,
             XXXXXXX, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI,
         KC_F10, KC_F1, KC_F2, KC_F3, KC_PAUS,
