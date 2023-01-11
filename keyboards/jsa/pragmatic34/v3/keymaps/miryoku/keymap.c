@@ -57,13 +57,13 @@ enum my_layers {
 
 const char *layer_names[TOTAL_LAYER_COUNT] = {
     [COLEMAK] = "COLEMAK",
-    [QWERTY]  = "QWERTY ",
-    [NAV]     = "  NAV  ",
-    [MOUSE]   = " MOUSE ",
-    [MEDIA]   = " MEDIA ",
-    [NUM]     = "  NUM  ",
-    [SYM]     = "  SYM  ",
-    [FUNC]    = " FUNC  ",
+    [QWERTY]  = "QWERTY",
+    [NAV]     = "NAV",
+    [MOUSE]   = "MOUSE",
+    [MEDIA]   = "MEDIA",
+    [NUM]     = "NUM",
+    [SYM]     = "SYMBOL",
+    [FUNC]    = "FUNCTION",
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -192,6 +192,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 bool oled_task_user(void) {
     if (!oled_needs_update) return false;
     oled_needs_update = false;
+    oled_clear();
 
     // render caps lock indicator
     if (caps_lock) {
