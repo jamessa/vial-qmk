@@ -1,5 +1,5 @@
 {
-    "name": "Pragmatic 36",
+    "name": "Pragmatic 36A",
     "vendorId": "0x1209",
     "productId": "0xA805",
     "lighting": "none",
@@ -8,7 +8,7 @@
         "cols": 10
     },
     "layouts": {
-        "keymap": [{ "name": "Pragmatic 36", "author": "James Sa" },
+        "keymap": [{ "name": "Pragmatic 36A", "author": "James Sa" },
             [{ "x": 2 }, "0,2", { "x": 5 }, "0,7"],
             [{ "y": -0.75, "x": 1 }, "0,1", { "x": 1 }, "0,3", { "x": 3 }, "0,6", { "x": 1 }, "0,8"],
             [{ "y": -0.75 }, "0,0", { "x": 3 }, "0,4", { "x": 1 }, "0,5", { "x": 3 }, "0,9"],

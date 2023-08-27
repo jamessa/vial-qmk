@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "quantum.h"
 
 static pin_t row_pins[MATRIX_ROWS] = MATRIX_ROW_PINS;
-static pin_t col_pins[MATRIX_COLS]   = MATRIX_COL_PINS;
+static pin_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;
 
 /* matrix state(1:on, 0:off) */
 extern matrix_row_t raw_matrix[MATRIX_ROWS]; // raw values
@@ -184,41 +184,28 @@ __attribute__((weak)) void matrix_read_rows_on_col(matrix_row_t current_matrix[]
     matrix_output_unselect_delay(current_col, key_pressed); // wait for all Row signals to go HIGH
 }
 
-void matrix_init(void) {
-    // initialize key pins
+void matrix_init_custom(void) {
     matrix_init_pins();
-
-    // initialize matrix state: all keys off
-    memset(matrix, 0, sizeof(matrix));
-    memset(raw_matrix, 0, sizeof(raw_matrix));
-
-    debounce_init(MATRIX_ROWS);
-
-    matrix_init_quantum();
 }
 
-uint8_t matrix_scan(void) {
-    matrix_row_t curr_matrix[MATRIX_ROWS] = {0};
+bool matrix_scan_custom(matrix_row_t prev[]) {
+    matrix_row_t curr[MATRIX_ROWS] = {0};
 
     // COL2ROW, odd cols
     // Set row, read cols
-    for (uint8_t current_row = 0; current_row < MATRIX_ROWS; current_row++) {
-        matrix_read_cols_on_row(curr_matrix, current_row);
+    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+        matrix_read_cols_on_row(curr, row);
     }
 
     // ROW2COL, even cols
     // Set col, read rows
     matrix_row_t row_shifter = MATRIX_ROW_SHIFTER;
-    for (uint8_t current_col = 0; current_col < MATRIX_COLS; current_col++, current_col++, row_shifter <<= 2) {
-        matrix_read_rows_on_col(curr_matrix, current_col, row_shifter);
+    for (uint8_t col = 0; col < MATRIX_COLS; col++, col++, row_shifter <<= 2) {
+        matrix_read_rows_on_col(curr, col, row_shifter);
     }
 
+    bool changed = memcmp(prev, curr, sizeof(curr)) != 0;
+    if  (changed)  memcpy(prev, curr, sizeof(curr));
 
-    bool changed = memcmp(raw_matrix, curr_matrix, sizeof(curr_matrix)) != 0;
-    if (changed) memcpy(raw_matrix, curr_matrix, sizeof(curr_matrix));
-
-    debounce(raw_matrix, matrix, MATRIX_ROWS, changed);
-    matrix_scan_quantum();
-
-    return (uint8_t)changed;
+    return changed;
 }
