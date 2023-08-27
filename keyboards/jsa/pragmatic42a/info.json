@@ -1,7 +1,19 @@
 {
-    "keyboard_name": "Pragmatic 42 duplex",
-    "url": "",
+    "keyboard_name": "Pragmatic 42A",
+    "manufacturer": "Pragmatic Inc",
     "maintainer": "James Sa",
+    "url": "www.pragmatic.com.tw",
+
+    "processor": "atmega32u4",
+    "bootloader": "caterina",
+
+    "usb":{
+        "vid": "0x1209",
+        "pid": "0xA805",
+        "device_version": "4.2.0",
+        "max_power": 80
+    },
+
     "layouts": {
         "LAYOUT": {
             "layout": [

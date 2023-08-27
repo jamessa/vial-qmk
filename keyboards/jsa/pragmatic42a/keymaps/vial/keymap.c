@@ -78,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           _______, XXXXXXX, _______, KC_UNDS, _______, _______
     ),
     [4] = LAYOUT(
-       _______, RESET,   _______, _______, _______, _______, _______, KC_BRIU, KC_VOLU, ZOOMIN,  _______, _______,
+       _______, QK_RBT,  _______, _______, _______, _______, _______, KC_BRIU, KC_VOLU, ZOOMIN,  _______, _______,
        _______, _______, _______, _______, _______, _______, _______, KC_BRID, KC_VOLD, ZOOMOUT, _______, _______,
        _______, _______, _______, _______, _______, _______, _______, _______, _______, ACTUAL,  _______, _______,
                          _______, _______, _______, _______, XXXXXXX, _______
@@ -94,9 +94,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 void keyboard_post_init_user(void) {
   // Customise these values to desired behaviour
-  debug_enable=true;
-  debug_matrix=true;
+//   debug_enable=true;
+//   debug_matrix=true;
   //debug_keyboard=true;
   //debug_mouse=true;
 }
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode){
+        case  KC_F17:
+            if (record->event.pressed) {
+                caps_word_on();
+            }
+            return false;   // override F17, otherwise caps word will be stopped.
+    }
+    return true;
+}

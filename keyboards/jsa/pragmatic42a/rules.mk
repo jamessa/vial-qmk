@@ -10,6 +10,6 @@ NKRO_ENABLE	    = yes       # USB Nkey Rollover
 LTO_ENABLE      = yes
 
 CUSTOM_MATRIX = lite        # Custom matrix for "Duplex Matrix"
-SRC += matrix.c
+SRC += lib/duplex_matrix.c
 
 CAPS_WORD_ENABLE = yes

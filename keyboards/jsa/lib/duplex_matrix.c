@@ -100,8 +100,9 @@ __attribute__((weak)) void matrix_read_cols_on_row(matrix_row_t current_matrix[]
     matrix_output_select_delay();
 
     // For each col...
-    matrix_row_t row_shifter = MATRIX_ROW_SHIFTER << 1;
-    for (uint8_t col_index = 1; col_index < MATRIX_COLS; col_index++, col_index++, row_shifter <<= 2) {
+    int8_t start_at =(MATRIX_COLS/2)%2; // 1 for 36(10x4), 0 for 42(12x4) and above.
+    matrix_row_t row_shifter = MATRIX_ROW_SHIFTER << start_at;
+    for (uint8_t col_index = start_at; col_index < MATRIX_COLS; col_index++, col_index++, row_shifter <<= 2) {
         uint8_t pin_state = readMatrixPin(col_pins[col_index]);
 
         // Populate the matrix row with the state of the col pin
@@ -199,8 +200,9 @@ bool matrix_scan_custom(matrix_row_t prev[]) {
 
     // ROW2COL, even cols
     // Set col, read rows
-    matrix_row_t row_shifter = MATRIX_ROW_SHIFTER;
-    for (uint8_t col = 0; col < MATRIX_COLS; col++, col++, row_shifter <<= 2) {
+    int8_t start_at = 1-(MATRIX_COLS/2)%2; // 0 for 36(10x4), 1 for 42(12x4) and above.
+    matrix_row_t row_shifter = MATRIX_ROW_SHIFTER << start_at;
+    for (uint8_t col = start_at; col < MATRIX_COLS; col++, col++, row_shifter <<= 2) {
         matrix_read_rows_on_col(curr, col, row_shifter);
     }
 
