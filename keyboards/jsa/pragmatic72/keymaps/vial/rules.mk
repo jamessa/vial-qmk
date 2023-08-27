@@ -1,7 +1,7 @@
 VIA_ENABLE = yes
 VIAL_ENABLE = yes
-VIAL_INSECURE = yes
 LTO_ENABLE = yes
 QMK_SETTINGS = yes
+CAPS_WORD_ENABLE = yes
 
 EXTRAFLAGS += -flto

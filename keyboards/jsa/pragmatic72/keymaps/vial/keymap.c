@@ -90,3 +90,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______
     )
 };
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode){
+        case  KC_F17:
+            if (record->event.pressed) {
+                caps_word_on();
+            }
+            return false;   // override F17, otherwise caps word will be stopped.
+    }
+    return true;
+}
