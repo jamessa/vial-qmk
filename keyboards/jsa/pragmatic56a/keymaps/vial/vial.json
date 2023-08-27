@@ -1,5 +1,5 @@
 {
-    "name": "Pragmatic 56",
+    "name": "Pragmatic 56A",
     "vendorId": "0x1209",
     "productId": "0xA805",
     "lighting": "none",
@@ -9,7 +9,7 @@
     },
     "layouts": {
         "keymap": [{
-                "name": "Pragmatic 56",
+                "name": "Pragmatic 56A",
                 "author": "James Sa"
             },
             [{ "x": 3.25 }, "0,3", { "x": 5 }, "0,8"],
