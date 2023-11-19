@@ -10,7 +10,7 @@
     "usb":{
         "vid": "0x1209",
         "pid": "0xA805",
-        "device_version": "4.2.0",
+        "device_version": "4.2.1",
         "max_power": 80
     },
 
