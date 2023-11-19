@@ -1,9 +1,8 @@
 {
     "manufacturer": "James Sa",
-    "keyboard_name": "Shang Pad",
+    "keyboard_name": "Pragmatic 8",
     "maintainer": "James Sa",
     "bootloader": "atmel-dfu",
-    "diode_direction": "ROW2COL",
     "features": {
         "bootmagic": false,
         "command": false,
@@ -13,8 +12,10 @@
         "nkro": true
     },
     "matrix_pins": {
-        "cols": ["B6", "B1", "B3", "F6"],
-        "rows": ["F7", "B2"]
+        "direct": [
+            ["F4", "F1", "F0", "B7"],
+            ["F5", "F6", "C6", "C7" ]
+        ]
     },
     "processor": "atmega32u4",
     "url": "",
