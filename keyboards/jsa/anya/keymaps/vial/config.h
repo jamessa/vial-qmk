@@ -1,0 +1,6 @@
+#pragma once
+
+// set keymap layers count to 7
+#define DYNAMIC_KEYMAP_LAYER_COUNT 7
+
+#define VIAL_KEYBOARD_UID {0x57, 0x12, 0x4E, 0x63, 0xED, 0x48, 0x69, 0xAD}
