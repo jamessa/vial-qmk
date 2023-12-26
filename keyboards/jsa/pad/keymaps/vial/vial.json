@@ -1,7 +1,7 @@
 {
-    "name": "Pad",
-    "vendorId": "0xFEED",
-    "productId": "0x0F03",
+    "name": "Pragmatic 8",
+    "vendorId": "0x1209",
+    "productId": "0xA805",
     "lighting": "none",
     "matrix": {
         "rows": 2,
@@ -9,7 +9,7 @@
     },
     "layouts": {
         "keymap": [{
-                "name": "Pad",
+                "name": "Pragmatic 8",
                 "author": "James Sa"
             },
             [
