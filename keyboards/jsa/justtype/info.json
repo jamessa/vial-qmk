@@ -1,22 +1,18 @@
 {
     "manufacturer": "Pragmitic Inc.",
-    "keyboard_name": "Anya",
+    "keyboard_name": "Just Type",
     "maintainer": "James Sa",
     "url": "www.pragmatic.com.tw",
     "bootloader": "caterina",
     "diode_direction": "ROW2COL",
-    "features": {
-        "extrakey": true,
-        "mousekey": true,
-        "nkro": true
-    },
+    "features": {"extrakey": true, "mousekey": true, "nkro": true},
     "matrix_pins": {
-        "cols": ["D3", "D4", "C6", "D7", "E6", "B4", "B5", "B3", "B2", "B6"],
-        "rows": ["D2", "D1", "D0", "B1"]
+        "cols": ["B5", "B4", "E6", "B1", "B3"],
+        "rows": ["D1", "D0", "D4", "C6", "D7"]
     },
     "processor": "atmega32u4",
     "usb": {
-        "device_version": "4.2.1",
+        "device_version": "1.0.0",
         "pid": "0x1209",
         "vid": "0xA805",
         "max_power": 50
@@ -24,39 +20,31 @@
     "layouts": {
         "LAYOUT": {
             "layout": [
-                { "matrix": [0, 0], "x": 0, "y": 0 },
-                { "matrix": [0, 1], "x": 1, "y": 0 },
-                { "matrix": [0, 2], "x": 2, "y": 0 },
-                { "matrix": [0, 3], "x": 3, "y": 0 },
-                { "matrix": [0, 4], "x": 4, "y": 0 },
-                { "matrix": [0, 5], "x": 5, "y": 0 },
-                { "matrix": [0, 6], "x": 6, "y": 0 },
-                { "matrix": [0, 7], "x": 7, "y": 0 },
-                { "matrix": [0, 8], "x": 8, "y": 0 },
-                { "matrix": [0, 9], "x": 9, "y": 0 },
-                { "matrix": [1, 0], "x": 0, "y": 1 },
-                { "matrix": [1, 1], "x": 1, "y": 1 },
-                { "matrix": [1, 2], "x": 2, "y": 1 },
-                { "matrix": [1, 3], "x": 3, "y": 1 },
-                { "matrix": [1, 4], "x": 4, "y": 1 },
-                { "matrix": [1, 5], "x": 5, "y": 1 },
-                { "matrix": [1, 6], "x": 6, "y": 1 },
-                { "matrix": [1, 7], "x": 7, "y": 1 },
-                { "matrix": [1, 8], "x": 8, "y": 1 },
-                { "matrix": [1, 9], "x": 9, "y": 1 },
-                { "matrix": [2, 0], "x": 0, "y": 2 },
-                { "matrix": [2, 1], "x": 1, "y": 2 },
-                { "matrix": [2, 2], "x": 2, "y": 2 },
-                { "matrix": [2, 3], "x": 3, "y": 2 },
-                { "matrix": [2, 4], "x": 4, "y": 2 },
-                { "matrix": [2, 5], "x": 5, "y": 2 },
-                { "matrix": [2, 6], "x": 6, "y": 2 },
-                { "matrix": [2, 7], "x": 7, "y": 2 },
-                { "matrix": [2, 8], "x": 8, "y": 2 },
-                { "matrix": [2, 9], "x": 9, "y": 2 },
-                { "matrix": [3, 2], "x": 2, "y": 3 },
-                { "matrix": [3, 4], "x": 4, "y": 3 },
-                { "matrix": [3, 6], "x": 6, "y": 3 }
+                { "matrix": [0, 2], "x":  3.0, "y": 0.00 },
+                { "matrix": [0, 1], "x":  2.0, "y": 0.50 },
+                { "matrix": [0, 3], "x":  4.0, "y": 0.50 },
+                { "matrix": [0, 4], "x":  5.0, "y": 0.75 },
+                { "matrix": [0, 0], "x":  1.0, "y": 1.00 },
+                { "matrix": [1, 2], "x":  3.0, "y": 1.00 },
+                { "matrix": [1, 0], "x":  0.0, "y": 1.25 },
+                { "matrix": [1, 1], "x":  2.0, "y": 1.50 },
+                { "matrix": [1, 3], "x":  4.0, "y": 1.50 },
+                { "matrix": [1, 4], "x":  5.0, "y": 1.75 },
+                { "matrix": [2, 1], "x":  1.0, "y": 2.00 },
+                { "matrix": [2, 2], "x":  3.0, "y": 2.00 },
+                { "matrix": [2, 0], "x":  0.0, "y": 2.25 },
+                { "matrix": [3, 2], "x":  2.0, "y": 2.50 },
+                { "matrix": [2, 3], "x":  4.0, "y": 2.50 },
+                { "matrix": [2, 4], "x":  5.0, "y": 2.75 },
+                { "matrix": [3, 1], "x":  1.0, "y": 3.00 },
+                { "matrix": [4, 3], "x":  3.0, "y": 3.00 },
+                { "matrix": [3, 0], "x":  0.0, "y": 3.25 },
+                { "matrix": [4, 2], "x":  2.0, "y": 3.50 },
+                { "matrix": [3, 3], "x":  4.5, "y": 3.75 },
+                { "matrix": [4, 1], "x":  1.0, "y": 4.00 },
+                { "matrix": [4, 0], "x":  0.0, "y": 4.25 },
+                { "matrix": [3, 4], "x": -0.5, "y": 1.50 },
+                { "matrix": [4, 4], "x": -0.5, "y": 1.50 }
             ]
         }
     }
