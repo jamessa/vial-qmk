@@ -1,6 +1,17 @@
+
 #pragma once
 
-// set keymap layers count to 7
-#define DYNAMIC_KEYMAP_LAYER_COUNT 7
+#define DYNAMIC_KEYMAP_LAYER_COUNT 5
 
-#define VIAL_KEYBOARD_UID {0x57, 0x12, 0x4E, 0x63, 0xED, 0x48, 0x69, 0xAD}
+#define VIAL_KEYBOARD_UID {0xDF, 0x91, 0x77, 0xF7, 0xA7, 0xCD, 0x50, 0xEE}
+
+// #define POINTING_DEVICE_DEBUG
+#define ANALOG_JOYSTICK_X_AXIS_PIN F6
+#define ANALOG_JOYSTICK_Y_AXIS_PIN F7
+#define ANALOG_JOYSTICK_SPEED_REGULATOR 10
+
+// 搖桿位置一
+#define POINTING_DEVICE_INVERT_X
+
+// 搖桿位置二
+// #define POINTING_DEVICE_INVERT_Y
